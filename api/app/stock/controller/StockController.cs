@@ -59,5 +59,17 @@ namespace api.app.stock.controller
 
       return Ok();
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete([FromRoute] int id) {
+      var stock = context.Stocks.FirstOrDefault(x => x.Id == id);
+      if(stock is null) return NotFound();
+
+      context.Stocks.Remove(stock);
+      context.SaveChanges();
+      return NoContent();
+    }
   }
+
+  
 }
