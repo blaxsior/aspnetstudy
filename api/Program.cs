@@ -1,4 +1,5 @@
 using api.app.db;
+using api.app.stock.repository;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
@@ -7,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
     // https://learn.microsoft.com/ko-kr/aspnet/core/security/app-secrets
     // 시크릿 설정 => user-secrets init/add/list
@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
     .UseMySql(connectionString, 
     ServerVersion.AutoDetect(connectionString));
 });
+builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 // DI 등 처리하는 메인 앱
 var app = builder.Build();

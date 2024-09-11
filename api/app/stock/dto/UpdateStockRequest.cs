@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace api.app.stock.dto {
-  public class UpdateStockRequest {
+  public class UpdateStockDto {
     [Required]
     public string Symbol { get; set; } = string.Empty;
     [Required]
