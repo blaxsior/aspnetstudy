@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using api.app.stock.dto;
 using api.app.stock.mappers;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.app.stock.controller
 {
@@ -17,34 +18,34 @@ namespace api.app.stock.controller
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-      var stocks = context.Stocks.Select(s => s.ToStockDto()).ToList();
+      var stocks = await context.Stocks.Select(s => s.ToStockDto()).ToListAsync();
 
       return Ok(stocks);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get([FromRoute(Name = "id")] int id)
+    public async Task<IActionResult> Get([FromRoute(Name = "id")] int id)
     {
-      var stock = context.Stocks.FirstOrDefault(x => x.Id == id);
+      var stock = await context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
       if (stock is null) return NotFound();
       return Ok(stock.ToStockDto());
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] CreateStockRequest request) {
+    public async Task<IActionResult> Create([FromBody] CreateStockRequest request) {
       var stock = request.ToStock();
-      context.Stocks.Add(stock);
-      context.SaveChanges();
+      await context.Stocks.AddAsync(stock);
+      await context.SaveChangesAsync();
       // 생성 표현 목적의 Action
       // return CreatedAtAction(nameof(Get), new {id = stock.Id}, stock);
       return Created();
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequest request) {
-      var stock = context.Stocks.FirstOrDefault(x => x.Id == id);
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequest request) {
+      var stock = await context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
       if (stock is null) return NotFound();
 
       stock.Symbol = request.Symbol;
@@ -55,18 +56,18 @@ namespace api.app.stock.controller
       stock.MarketCap = request.MarketCap;
 
       // 변경사항 반영
-      context.SaveChanges();
+      await context.SaveChangesAsync();
 
       return Ok();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete([FromRoute] int id) {
-      var stock = context.Stocks.FirstOrDefault(x => x.Id == id);
+    public async Task<IActionResult> Delete([FromRoute] int id) {
+      var stock = await context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
       if(stock is null) return NotFound();
 
       context.Stocks.Remove(stock);
-      context.SaveChanges();
+      await context.SaveChangesAsync();
       return NoContent();
     }
   }
