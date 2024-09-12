@@ -1,3 +1,4 @@
+using System.Reflection;
 using api.app.db;
 using api.app.stock.repository;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +7,12 @@ using MySqlConnector;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => {
+    //https://learn.microsoft.com/ko-kr/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio-code#xml-comments
+    // c# 설명 주석이 swagger에 반영됨
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
     // https://learn.microsoft.com/ko-kr/aspnet/core/security/app-secrets
     // 시크릿 설정 => user-secrets init/add/list

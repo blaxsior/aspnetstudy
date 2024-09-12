@@ -43,9 +43,16 @@ namespace api.app.stock.controller
       return CreatedAtAction(nameof(Get), new {id = stock.Id}, stock);
     }
 
+
+    /// <summary>
+    /// stock 정보를 갱신한다.
+    /// </summary>
+    /// <param name="id">주식의 id 값</param>
+    /// <param name="dto">갱신된 정보</param>
+    /// <returns>변경된 주식 정보</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockDto request) {
-      var stock = await stockRepo.UpdateAsync(id, request);
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockDto dto) {
+      var stock = await stockRepo.UpdateAsync(id, dto);
 
       if(stock is null) return NotFound();    
       return Ok(stock.ToStockDto());
