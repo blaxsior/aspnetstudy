@@ -1,14 +1,13 @@
 using api.app.db;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using api.app.stock.dto;
 using api.app.stock.mappers;
-using Microsoft.EntityFrameworkCore;
 using api.app.stock.repository;
 
 namespace api.app.stock.controller
 {
   [Route("api/stock")]
+  [ApiController]
   public class StockController : ControllerBase
   {
     private readonly ApplicationDbContext context;

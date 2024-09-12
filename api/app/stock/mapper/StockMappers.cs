@@ -1,3 +1,4 @@
+using api.app.comment.mapper;
 using api.app.stock.dto;
 using api.app.stock.entity;
 
@@ -12,7 +13,8 @@ namespace api.app.stock.mappers {
         Purchase = stock.Purchase,
         LastDiv = stock.LastDiv,
         Industry = stock.Industry,
-        MarketCap = stock.MarketCap
+        MarketCap = stock.MarketCap,
+        Comments = stock.Comments.Select(x => x.toCommentDto()).ToList()
       };
     }
 

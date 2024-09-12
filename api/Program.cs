@@ -1,4 +1,5 @@
 using System.Reflection;
+using api.app.comment.repository;
 using api.app.db;
 using api.app.stock.repository;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,13 @@ builder.Services.AddSwaggerGen(options => {
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
+
+builder.Services.AddControllers()
+.AddNewtonsoftJson(options => {
+    // efcore에서 발생하는 원형 참조 문제 방지
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
     // https://learn.microsoft.com/ko-kr/aspnet/core/security/app-secrets
     // 시크릿 설정 => user-secrets init/add/list
@@ -25,6 +33,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
     ServerVersion.AutoDetect(connectionString));
 });
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 // DI 등 처리하는 메인 앱
 var app = builder.Build();

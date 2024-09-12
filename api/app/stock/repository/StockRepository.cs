@@ -22,19 +22,19 @@ namespace api.app.stock.repository
 
     public Task<List<Stock>> FindAllAsync()
     {
-      return context.Stocks.ToListAsync();
+      return context.Stocks.Include(it => it.Comments).ToListAsync();
     }
 
     public async Task<Stock?> FindByIdAsync(int id)
     {
-      var stock = await context.Stocks.FindAsync(id);
+      var stock = await context.Stocks.Include(it => it.Comments).FirstOrDefaultAsync(it => it.Id == id);
       return stock;
     }
 
     public async Task<Stock?> UpdateAsync(int id, UpdateStockDto dto)
     {
       var stock = await context.Stocks.FindAsync(id);
-      if(stock is null) return null;
+      if (stock is null) return null;
 
       stock.Symbol = dto.Symbol;
       stock.CompanyName = dto.CompanyName;
@@ -50,11 +50,16 @@ namespace api.app.stock.repository
     public async Task<Stock?> DeleteByIdAsync(int id)
     {
       var stock = await context.Stocks.FindAsync(id);
-      if(stock is null) return null;
+      if (stock is null) return null;
 
       context.Stocks.Remove(stock);
       await context.SaveChangesAsync();
       return stock;
+    }
+
+    public Task<bool> ExistsAsync(int id)
+    {
+      return context.Comments.AnyAsync(it => it.Id == id);
     }
   }
 }

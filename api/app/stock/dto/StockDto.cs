@@ -1,3 +1,5 @@
+using api.app.comment.dto;
+
 namespace api.app.stock.dto {
   public class StockDto {
     public int Id { get; set; }
@@ -7,5 +9,6 @@ namespace api.app.stock.dto {
     public decimal LastDiv { get; set; }
     public string Industry { get; set; }  = string.Empty;
     public long MarketCap { get; set; }
+    public List<CommentDto> Comments { get; set; } = [];
   }
 }

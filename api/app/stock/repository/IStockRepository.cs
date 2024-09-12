@@ -10,5 +10,7 @@ namespace api.app.stock.repository {
 
     Task<Stock?> UpdateAsync(int id, UpdateStockDto dto); 
     Task<Stock?> DeleteByIdAsync(int id);
+
+    Task<bool> ExistsAsync(int id);
   }
 }
