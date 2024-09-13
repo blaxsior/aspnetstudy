@@ -41,9 +41,16 @@ namespace api.app.stock.repository
           ("companyname", true) => query.OrderByDescending(it => it.CompanyName),
           _ => query
         };
-
       }
-      return await query.Include(it => it.Comments).ToListAsync();
+
+      // skip size 검색
+      var skipNumber = (queries.PageNumber - 1) * queries.PageSize;
+
+      return await query
+      .Include(it => it.Comments)
+      .Skip(skipNumber)
+      .Take(queries.PageSize)
+      .ToListAsync();
     }
 
     public async Task<Stock?> FindByIdAsync(int id)
