@@ -20,15 +20,15 @@ namespace api.app.stock.controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> findAll([FromQuery] ListStockQuery queries)
     {
-      var stocks = await stockRepo.FindAllAsync();
+      var stocks = await stockRepo.FindAllAsync(queries);
 
       return Ok(stocks);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get([FromRoute(Name = "id")] int id)
+    public async Task<IActionResult> findOne([FromRoute(Name = "id")] int id)
     {
       var stock = await stockRepo.FindByIdAsync(id);
       if (stock is null) return NotFound();
@@ -39,7 +39,7 @@ namespace api.app.stock.controller
     public async Task<IActionResult> Create([FromBody] CreateStockRequest request) {
       var stock = await stockRepo.CreateAsync(request.ToStock());
       // 생성 표현 목적의 Action
-      return CreatedAtAction(nameof(Get), new {id = stock.Id}, stock);
+      return CreatedAtAction(nameof(findOne), new {id = stock.Id}, stock);
     }
 
 

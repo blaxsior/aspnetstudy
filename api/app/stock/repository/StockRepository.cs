@@ -20,9 +20,30 @@ namespace api.app.stock.repository
       return stock;
     }
 
-    public Task<List<Stock>> FindAllAsync()
+    public async Task<List<Stock>> FindAllAsync(ListStockQuery queries)
     {
-      return context.Stocks.Include(it => it.Comments).ToListAsync();
+      var query = context.Stocks.AsQueryable();
+
+      // 일반적인 표준 API와 연동되서 쿼리가 생성됨
+      if (!string.IsNullOrWhiteSpace(queries.Symbol))
+        query = query.Where(x => x.Symbol.Contains(queries.Symbol));
+      if (!string.IsNullOrWhiteSpace(queries.CompanyName))
+        query = query.Where(x => x.CompanyName.Contains(queries.CompanyName));
+
+      // 리팩토링 방법 고민
+      if (!string.IsNullOrWhiteSpace(queries.SortBy))
+      {
+        query = (queries.SortBy.ToLower(), queries.IsDesc) switch
+        {
+          ("symbol", false) => query.OrderBy(it => it.Symbol),
+          ("symbol", true) => query.OrderByDescending(it => it.Symbol),
+          ("companyname", false) => query.OrderBy(it => it.CompanyName),
+          ("companyname", true) => query.OrderByDescending(it => it.CompanyName),
+          _ => query
+        };
+
+      }
+      return await query.Include(it => it.Comments).ToListAsync();
     }
 
     public async Task<Stock?> FindByIdAsync(int id)

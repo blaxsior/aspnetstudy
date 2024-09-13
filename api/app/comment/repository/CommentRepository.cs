@@ -1,6 +1,7 @@
 using api.app.comment.dto;
 using api.app.comment.entity;
 using api.app.db;
+using api.app.stock.dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.app.comment.repository
@@ -15,6 +16,7 @@ namespace api.app.comment.repository
 
     public Task<List<Comment>> FindAllAsync()
     {
+      
       return context.Comments.ToListAsync();
     }
     public async Task<Comment?> FindByIdAsync(int id)

@@ -3,7 +3,7 @@ using api.app.stock.entity;
 
 namespace api.app.stock.repository {
   public interface IStockRepository {
-    Task<List<Stock>> FindAllAsync();
+    Task<List<Stock>> FindAllAsync(ListStockQuery queries);
     Task<Stock?> FindByIdAsync(int id);
 
     Task<Stock> CreateAsync(Stock stock);
