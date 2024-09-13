@@ -44,5 +44,21 @@ namespace api.app.comment.controller
       if (comment is null) return NotFound();
       return CreatedAtAction(nameof(FindById), new { id = comment.Id }, comment.toCommentDto());
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentDto dto) {
+      var comment = await commentRepo.UpdateAsync(id, dto);
+
+      if(comment is null) return BadRequest("Comment Not Exists");
+      return Ok(comment);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id) {
+      var comment = await commentRepo.DeleteByIdAsync(id);
+
+      if(comment is null) return BadRequest("Comment Not Exists");
+      return Ok(comment);
+    }
   }
 }
