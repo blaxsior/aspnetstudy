@@ -22,12 +22,19 @@ namespace api.app.comment.controller
     [HttpGet]
     public async Task<IActionResult> FindAll()
     {
+      // API 모드에서는 사용 안해도 됨
+      // 각 요청마다 새로운 ModelState 만들어 사용
+      // if(!ModelState.IsValid) {
+      //   return BadRequest(ModelState);
+      // }
+
       var comments = await commentRepo.FindAllAsync();
       var dtos = comments.Select(it => it.toCommentDto());
       return Ok(dtos);
     }
 
-    [HttpGet("{id}")]
+    // type checking 실패하면 404 예외 반환
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> FindById([FromRoute] int id)
     {
       var comment = await commentRepo.FindByIdAsync(id);
@@ -45,7 +52,7 @@ namespace api.app.comment.controller
       return CreatedAtAction(nameof(FindById), new { id = comment.Id }, comment.toCommentDto());
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentDto dto) {
       var comment = await commentRepo.UpdateAsync(id, dto);
 
@@ -53,7 +60,7 @@ namespace api.app.comment.controller
       return Ok(comment);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id) {
       var comment = await commentRepo.DeleteByIdAsync(id);
 
