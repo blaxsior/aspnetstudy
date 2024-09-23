@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using api.app.comment.entity;
+using api.app.portfolio.entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.app.stock.entity
 {
+  [Table("Stocks")]
   public class Stock
   {
     public int Id { get; set; }
@@ -21,5 +23,6 @@ namespace api.app.stock.entity
     public long MarketCap { get; set; }
 
     public List<Comment> Comments { get; set; } = new List<Comment>();
+    public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
   }
 }
