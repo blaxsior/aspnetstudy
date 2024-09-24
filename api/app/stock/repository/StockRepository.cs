@@ -22,7 +22,10 @@ namespace api.app.stock.repository
 
     public async Task<List<Stock>> FindAllAsync(ListStockQuery queries)
     {
-      var query = context.Stocks.AsQueryable();
+      var query = context.Stocks
+      .Include(it => it.Comments)
+      .ThenInclude(it => it.AppUser)
+      .AsQueryable();
 
       // 일반적인 표준 API와 연동되서 쿼리가 생성됨
       if (!string.IsNullOrWhiteSpace(queries.Symbol))

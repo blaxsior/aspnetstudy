@@ -17,11 +17,11 @@ namespace api.app.comment.repository
     public Task<List<Comment>> FindAllAsync()
     {
       
-      return context.Comments.ToListAsync();
+      return context.Comments.Include(it => it.AppUser).ToListAsync();
     }
     public async Task<Comment?> FindByIdAsync(int id)
     {
-      var comment = await context.Comments.FindAsync(id);
+      var comment = await context.Comments.Include(it => it.AppUser).FirstOrDefaultAsync(it => it.Id == id);
       return comment;
     }
 

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using api.app.stock.entity;
+using api.app.user.entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.app.comment.entity
@@ -14,5 +15,7 @@ namespace api.app.comment.entity
     public DateTime CreatedOn {get; set; } = DateTime.Now;
     public int? StockId {get; set;} // navigation property
     public Stock? Stock { get; set; }
+    public string AppUserId { get; set; }
+    public AppUser AppUser { get; set; }
   }
 }

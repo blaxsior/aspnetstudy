@@ -8,6 +8,7 @@ namespace api.app.comment.mapper {
         Id = comment.Id,
         Content = comment.Content,
         CreatedOn = comment.CreatedOn,
+        CreatedBy = comment.AppUser?.UserName!,
         Title = comment.Title,
         StockId = comment.StockId
       };
