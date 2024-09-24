@@ -37,5 +37,15 @@ namespace api.app.portfolio.repository
       await context.SaveChangesAsync(); // 변경 적용 메서드
       return portfolio;
     }
+
+    public async Task<Portfolio?> DeleteAsync(AppUser appUser, string symbol)
+    {
+      var portfolio = await context.Portfolios.FirstOrDefaultAsync(x => x.AppUserId == appUser.Id && x.Stock.Symbol.ToLower() == symbol.ToLower());
+      if(portfolio == null) return null;
+
+      context.Portfolios.Remove(portfolio);
+      await context.SaveChangesAsync();
+      return portfolio;
+    }
   }
 }
