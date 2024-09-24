@@ -87,7 +87,12 @@ namespace api.app.stock.repository
 
     public Task<bool> ExistsAsync(int id)
     {
-      return context.Comments.AnyAsync(it => it.Id == id);
+      return context.Stocks.AnyAsync(it => it.Id == id);
+    }
+
+    public Task<Stock?> FindBySymbolAsync(string symbol)
+    {
+      return context.Stocks.Where(it => it.Symbol == symbol).FirstOrDefaultAsync();
     }
   }
 }

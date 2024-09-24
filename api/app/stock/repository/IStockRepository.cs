@@ -5,6 +5,7 @@ namespace api.app.stock.repository {
   public interface IStockRepository {
     Task<List<Stock>> FindAllAsync(ListStockQuery queries);
     Task<Stock?> FindByIdAsync(int id);
+    Task<Stock?> FindBySymbolAsync(string symbol);
 
     Task<Stock> CreateAsync(Stock stock);
 
