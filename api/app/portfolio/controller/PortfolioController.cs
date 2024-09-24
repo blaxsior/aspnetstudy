@@ -79,7 +79,7 @@ namespace api.app.portfolio.controller
 
       if (filteredStocks.Count() == 1)
       {
-        await portfolioRepository.DeleteAsync(filteredStocks[0].);
+        await portfolioRepository.DeleteAsync(appUser, symbol);
       }
       else
       {
